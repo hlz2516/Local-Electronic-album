@@ -48,6 +48,7 @@ public class BorderUI implements Cloneable{
 	public void setCenterArea(JComponent pane) {
 		if(pane.getPreferredSize().equals(getCenterPreferredSize())) {
 			centerArea = pane;
+			//System.out.println("centerArea repalced");
 		}
 	}
 	
