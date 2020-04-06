@@ -26,6 +26,8 @@ public class GridFrame extends JPanel{
 	private ArrayList<Cover> covers;
 	private JPanel[] cells; //网格布局里所有的pane的引用
 	private static Dimension gridSize;
+	//private static GridFrame curFrame;
+
 	public GridFrame(int rows,int cols,Dimension frameSize) {
 		covers = new ArrayList<Cover>();
 //		this.frameSize = frameSize;
@@ -61,6 +63,10 @@ public class GridFrame extends JPanel{
 			replace(covers.get(i),i);
 		}
 		startP = covers.size();
+	}
+	
+	public ArrayList<Cover> getCovers(){
+		return covers;
 	}
 	
 	public void deleteCover(int index) {
@@ -160,6 +166,14 @@ public class GridFrame extends JPanel{
 	public static Dimension getGridSize() {
 		return gridSize;
 	}
+	
+//	public static GridFrame getCurFrame() {
+//		return curFrame;
+//	}
+//
+//	public static void setCurFrame(GridFrame curFrame) {
+//		GridFrame.curFrame = curFrame;
+//	}
 	
 //	public static void main(String[] args) {
 //		JFrame frame = new JFrame();

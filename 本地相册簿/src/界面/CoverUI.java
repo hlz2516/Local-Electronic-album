@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -12,10 +13,15 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import beans.CoverBean;
 import tools.DataRegister;
+import tools.FileOperator;
 import 组件.Cover;
 import 组件.CoverEditor;
 import 组件.GridFrame;
+import 组件.MyThread;
+
+import com.alibaba.fastjson.JSONArray;
 
 public class CoverUI {
 	public static BorderUI create() {
@@ -28,9 +34,15 @@ public class CoverUI {
 		grid.setBackground(Color.red);
 		ui.setCenterArea(grid);
 		
-//		JPanel func = new JPanel();
-//		func.setPreferredSize(ui.getFuncPreferredSize());
-//		func.setLayout(new FlowLayout());
+		//加载相册簿封面集
+		String path = ".//user//test";
+		Cover.setStorePath(path + "//covers");
+		ArrayList<CoverBean> covers = FileOperator.readJSONArray(path + "//covers.json", CoverBean.class);
+		for(int i = 0;i < covers.size();i++) {
+			Cover tmp = new Cover();
+			tmp.setBean(covers.get(i));
+			grid.addCover(tmp);
+		}
 		
 		JPanel func = new JPanel();
 		func.setPreferredSize(ui.getFuncPreferredSize());
@@ -61,39 +73,28 @@ public class CoverUI {
 			public void actionPerformed(ActionEvent e) {
 				//grid.addCover(new Cover());
 				CoverEditor editor = new CoverEditor(UIManager.getFrame());
-				Thread maint = Thread.currentThread();
-				new Thread(new Runnable() {
-					
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						while(!DataRegister.getChanged()) {
-							if(editor.isDisplayable()) {
-								DataRegister.setTheme(null);
-								DataRegister.setImagePath(null);
-								DataRegister.setBriefIntro(null);
-								 break;
-							}
-							try {
-								Thread.sleep(500);
-							} catch (Exception e2) {
-								// TODO: handle exception
-							}
-						}
-						maint.interrupt();
-					}
-				}).start();
+				MyThread.setCurThread(Thread.currentThread());
+				MyThread t = new MyThread(editor);
+				t.start();
+				
 				try {
 					Thread.sleep(9999999999999999L);
 				} catch (Exception e2) {
 					System.out.println("主线程已唤醒");
 				}
-				Cover tmp = new Cover();
-				grid.addCover(tmp);
-				tmp.setThemeText(DataRegister.getTheme());
-				tmp.setImagePath(DataRegister.getImagePath());
-				tmp.setBriefText(DataRegister.getBriefIntro());
-				grid.validate();
+				if(DataRegister.getTheme() == null && 
+						DataRegister.getImagePath() == null && 
+						DataRegister.getBriefIntro() == null) {
+					
+				}else {
+					Cover tmp = new Cover();
+					grid.addCover(tmp);
+					tmp.setThemeText(DataRegister.getTheme());
+					tmp.setImagePath(DataRegister.getImagePath());
+					tmp.showImage();
+					tmp.setBriefText(DataRegister.getBriefIntro());
+					grid.validate();
+				}
 				DataRegister.setChanged(false);
 			}
 		});
@@ -154,6 +155,43 @@ public class CoverUI {
 			}
 		});
 		func.add(swapbtn);
+		
+		JButton savebtn = new JButton("save");
+		savebtn.setPreferredSize(new Dimension(100, 30));
+		savebtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				ArrayList<Cover> covers = grid.getCovers();
+				//设置cover的存储路径
+				String path = ".//user//test";
+				FileOperator.createFolder(path);
+				Cover.setStorePath(path);
+				FileOperator.createFolder(path + "//covers");
+				//遍历covers，找出其id，分别在用户名目录下创建文件夹和往covers里写入jpg，
+				//然后往jsonarray里加入其bean
+				JSONArray jArray = new JSONArray();
+				for(int i =0;i < covers.size();i++) {
+					Cover curCover = covers.get(i);
+					CoverBean curbean = curCover.getBean();
+					String id = curbean.getCoverId();
+					FileOperator.createFolder(path + "//" + id);
+					String source = null;
+					if((source = curCover.getImagePath()) != null) {
+						if(source.equals(path + "//covers//" + id + ".jpg")) {
+							jArray.add(curbean);
+							continue;
+						}
+						FileOperator.copyFile(source, path + "//covers//" + id + ".jpg");
+					}
+					jArray.add(curbean);
+				}
+				//在用户名目录下创建covers.json，然后写入jsonarray
+				FileOperator.writeJSON(path + "//covers.json", jArray);
+			}
+		});
+		func.add(savebtn);
 		
 		ui.setFuncArea(func);
 		

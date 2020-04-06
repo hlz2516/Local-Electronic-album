@@ -28,4 +28,7 @@ public class CoverBean{
 	public void setBriefIntro(String briefIntro) {
 		this.briefIntro = briefIntro;
 	}
+	public String toString() {
+		return "theme:" + theme + " coverId:" + coverId + " briefIntro:" + briefIntro;
+	}
 }

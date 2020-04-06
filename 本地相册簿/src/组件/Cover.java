@@ -3,10 +3,15 @@ package 组件;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.*;
 
 import beans.CoverBean;
+import tools.DataRegister;
+import 界面.UIManager;
 
 public class Cover extends JPanel implements Cloneable{
 	private CoverBean bean;
@@ -26,7 +31,6 @@ public class Cover extends JPanel implements Cloneable{
 		this.setLayout(new BorderLayout(10,10));
 		int width = GridFrame.getGridSize().width;
 		int height = GridFrame.getGridSize().height;
-		System.out.println("grid height:" + height);
 		
 		theme = new JLabel();
 		theme.setPreferredSize(new Dimension(width, (int)(height * themeHRate)));
@@ -37,6 +41,39 @@ public class Cover extends JPanel implements Cloneable{
 		imgLabel.setPreferredSize(new Dimension(width,
 				(int)(height * (1 - themeHRate - briefIntroHRate))));
 		imgLabel.setBorder(BorderFactory.createDashedBorder(null));
+		imgLabel.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent arg0) {
+				if(arg0.getClickCount() == 1) {
+					Cover tmp = Cover.this;
+					Cover.setCurCover(tmp);
+				}
+				if(arg0.getClickCount() == 2) {
+					Cover thisCover = Cover.this;
+					MyThread.setCurThread(Thread.currentThread());
+					CoverEditor editor = new CoverEditor(UIManager.getFrame(),
+							theme.getText(), imagePath, briefIntro.getText());
+					MyThread t = new MyThread(editor);
+					t.start();
+					
+					try {
+						Thread.sleep(9999999999999999L);
+					} catch (Exception e2) {
+						System.out.println("主线程已唤醒");
+					}
+					if(DataRegister.getTheme() == null && 
+							DataRegister.getImagePath() == null && 
+							DataRegister.getBriefIntro() == null) {
+						
+					}else {
+						thisCover.setThemeText(DataRegister.getTheme());
+						thisCover.setImagePath(DataRegister.getImagePath());
+						thisCover.showImage();
+						thisCover.setBriefText(DataRegister.getBriefIntro());
+					}
+					DataRegister.setChanged(false);
+				}
+			}
+		});
 		this.add(imgLabel,BorderLayout.CENTER);
 		
 		JLabel fillW = new JLabel();
@@ -58,6 +95,10 @@ public class Cover extends JPanel implements Cloneable{
 	}
 	public void setBean(CoverBean bean) {
 		this.bean = bean;
+		this.setThemeText(bean.getTheme());
+		this.setImagePath(storePath + "//" + bean.getCoverId() + ".jpg");
+		this.showImage();
+		this.setBriefText(bean.getBriefIntro());
 	}
 	public String getImagePath() {
 		return imagePath;
@@ -93,6 +134,13 @@ public class Cover extends JPanel implements Cloneable{
 	public String getBriefText() {
 		return briefIntro.getText();
 	}
+	public void showImage() {
+		if(imagePath == null) return;
+		 ImageIcon img = new ImageIcon(imagePath);
+		 Dimension imgSize = imgLabel.getPreferredSize();
+		 img.setImage(img.getImage().getScaledInstance(imgSize.width, imgSize.height,Image.SCALE_DEFAULT));
+		 imgLabel.setIcon(img);
+	}
 	protected Cover clone() throws CloneNotSupportedException{
 			Cover c = new Cover();
 			c.setBean(this.getBean());
@@ -100,5 +148,9 @@ public class Cover extends JPanel implements Cloneable{
 			c.setThemeText(this.getThemeText());
 			c.setBriefText(this.getBriefText());
 			return c;
+	}
+	
+	public String toString() {
+		return bean.toString();
 	}
 }

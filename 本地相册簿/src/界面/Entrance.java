@@ -16,6 +16,7 @@ import beans.StretchTextBean;
 import beans.UserBean;
 import tools.FileOperator;
 import 组件.ImageStorage;
+import 组件.MyThread;
 import 组件.Page;
 import 组件.StretchImageLabel;
 import 组件.StretchTextArea;
