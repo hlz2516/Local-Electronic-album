@@ -9,6 +9,7 @@ import javax.swing.*;
 
 import beans.PageBean;
 import tools.FileOperator;
+import 组件.ImageStorage;
 import 组件.Page;
 import 组件.PageManager;
 import 组件.PageManager.ImageCreat;
@@ -19,20 +20,28 @@ public class PageUI {
 		ui.setTitile("相册簿页面");
 		
 		PageManager pm = new PageManager();
+		String path = PageManager.getStorePath();
 		//在这里进行页面数据的加载
 		//同样以之前的目录进行测试
 		Page p1 = null;
-		ArrayList<PageBean> pbs = FileOperator.readJSONArray(".//pages.json", PageBean.class);
-		if(pbs != null) {
+		System.out.println(PageManager.getStorePath());
+		ArrayList<PageBean> pbs = FileOperator.readJSONArray(PageManager.getStorePath() + "//pages.json", PageBean.class);
+		if(pbs != null) { //第N次进相册簿所以加载
+			ImageStorage.loadImages(PageManager.getStorePath() + "//images");
+			
 			ArrayList<Page> pages = new ArrayList<Page>(pbs.size());
 			for(int i =0;i < pbs.size();i++) {
 				Page tmp = new Page();
 				tmp.setPreferredSize(ui.getCenterPreferredSize());
 				tmp.setBean(pbs.get(i));
+				System.out.println(pbs.get(i));
 				pm.addPage(tmp);
 			}
 			p1 = pm.getPages().get(0);
-		}else {
+		}else { //说明这是第一次进这个相册簿
+			//在这个目录下新建一个images文件夹
+			FileOperator.createFolder(PageManager.getStorePath() + "//images");
+			System.out.println("第一次进入");
 			p1 = new Page();
 			p1.setPreferredSize(ui.getCenterPreferredSize());
 			pm.addPage(p1);
@@ -113,6 +122,8 @@ public class PageUI {
 		
 		JButton quit = new JButton("退出");
 		quit.setPreferredSize(btnSize);
+		PageManager.Quit q = pm.new Quit();
+		quit.addActionListener(q);
 		
 		JButton check = new JButton("check");
 		check.setPreferredSize(btnSize);

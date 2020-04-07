@@ -1,10 +1,18 @@
 package teststh;
 
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -16,76 +24,50 @@ import 界面.UIManager;
 import 组件.ImageStorage;
 
 //本包中的东西均是为了实验测试一些东西，各位看官可略过
-public class Test {
+public class Test {  
 	public static void main(String[] args) {
-		JFrame frame = new JFrame();
-		Dimension rect = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setSize(rect.width*2/3,rect.height*2/3);
-		frame.setLocationByPlatform(true);
-		//frame.setExtendedState(Frame.MAXIMIZED_BOTH);
-		frame.setLayout(null);
-		
-		JTextField name = new JTextField();
-		name.setSize(100,30);
-		name.setLocation(400, 200);
-		frame.add(name);
-		
-		JTextField birth = new JTextField();
-		birth.setSize(100,30);
-		birth.setLocation(600, 200);
-		frame.add(birth);
-		
-		JButton createbtn = new JButton("create");
-		createbtn.setSize(100,30);
-		createbtn.setLocation(200, 200);
-		createbtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				MyDialog d = new MyDialog(frame);
-				User user = User.getInstance();
-				Thread maint = Thread.currentThread();
-				new Thread(new Runnable() {
-					
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						while((user.getName()==null) && (user.getBirth()==null)) {
-							if(d.isDisplayable()) break;
-							try {
-								Thread.sleep(500);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-						maint.interrupt();
-						//System.out.println(d);
-					}
-				}).start();
-				try {
-					maint.sleep(9999999999999L);
-				} catch (InterruptedException e1) {
-					//e1.printStackTrace();
-					//System.out.println("主线程已唤醒");
-				}
-				name.setText(user.getName());
-				birth.setText(user.getBirth());
-				user.setNullName();
-				user.setNullBirth();
-			}
-		});
-		frame.add(createbtn);
-		
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
+        try {  
+            File fi = new File(".//images//2222.jpg"); //大图文件  
+            File fo = new File(".//2222.jpg"); //将要转换出的小图文件  
+            int nw = 500;  
+            /* 
+            AffineTransform 类表示 2D 仿射变换，它执行从 2D 坐标到其他 2D 
+		            坐标的线性映射，保留了线的“直线性”和“平行性”。可以使用一系 
+		            列平移、缩放、翻转、旋转和剪切来构造仿射变换。 
+            */  
+            //AffineTransform transform = new AffineTransform();  
+            BufferedImage bis = ImageIO.read(fi); //读取图片  
+            int w = bis.getWidth();  
+            int h = bis.getHeight();  
+             //double scale = (double)w/h;  
+            int nh = (nw*h)/w ;  
+            double sx = (double)nw/w;  
+            double sy = (double)nh/h;  
+            //transform.setToScale(sx,sy); //setToScale(double sx, double sy) 将此变换设置为缩放变换。  
+            System.out.println("w:" + w + " h:" + h);  
+            System.out.println("nw:" + nw + " nh: " + nh);
+            /* 
+             * AffineTransformOp类使用仿射转换来执行从源图像或 Raster 中 2D 坐标到目标图像或 
+             *  Raster 中 2D 坐标的线性映射。所使用的插值类型由构造方法通过 
+             *  一个 RenderingHints 对象或通过此类中定义的整数插值类型之一来指定。 
+			            如果在构造方法中指定了 RenderingHints 对象，则使用插值提示和呈现 
+			            的质量提示为此操作设置插值类型。要求进行颜色转换时，可以使用颜色 
+			            呈现提示和抖动提示。 注意，务必要满足以下约束：源图像与目标图像 
+			            必须不同。 对于 Raster 对象，源图像中的 band 数必须等于目标图像中 
+			            的 band 数。 
+            */  
+           // AffineTransformOp ato = new AffineTransformOp(transform,null);  
+            BufferedImage bid = new BufferedImage(600,400,BufferedImage.TYPE_3BYTE_BGR);  
+            bid.getGraphics().drawImage(bis, 0, 0, 600, 400, null);
+            /* 
+             * TYPE_3BYTE_BGR 表示一个具有 8 位 RGB 颜色分量的图像， 
+             * 对应于 Windows 风格的 BGR 颜色模型，具有用 3 字节存 
+             * 储的 Blue、Green 和 Red 三种颜色。 
+            */  
+            //ato.filter(bis,bid);  
+            ImageIO.write(bid,"jpeg",fo);  
+        } catch(Exception e) {  
+            e.printStackTrace();  
+        }  
 	}
 }
-
-//class Mythread extends Thread{
-//	public void run() {
-//		
-//		
-//	}
-//}

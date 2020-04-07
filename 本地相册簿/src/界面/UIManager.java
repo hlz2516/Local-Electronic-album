@@ -72,4 +72,12 @@ public class UIManager {
 	public static JFrame getFrame() {
 		return frame;
 	}
+	
+	public static void deleteUI(String UIName) {
+		Set<String> s = map.keySet();
+		if(s.contains(UIName)) {
+			System.out.println("“—’“µΩUI");
+			map.remove(UIName);
+		}
+	}
 }

@@ -29,7 +29,7 @@ public class Entrance {
 		frame.setLocationByPlatform(true);
 		//frame.setExtendedState(Frame.MAXIMIZED_BOTH);
 		//frame.setLayout(null);
-		ImageStorage.loadImages(".//testImages");
+//		ImageStorage.loadImages(".//testImages");
 		
 		UIManager.setFrame(frame);
 		BorderUI coverui = CoverUI.create();

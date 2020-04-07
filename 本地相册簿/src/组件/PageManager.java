@@ -17,12 +17,14 @@ import beans.StretchImageBean;
 import beans.StretchTextBean;
 import tools.FileOperator;
 import 界面.BorderUI;
+import 界面.CoverUI;
 import 界面.UIManager;
 //该类实现页面内的编辑，页面的管理，页面的存储与加载
 public class PageManager {
 	private static Page curPage;
 	private ArrayList<Page> pages;
 	private JLabel label;
+	private static String storePath;
 	//利用成员内部类可以操作当前页面对象，以下类内方法均是对页面内的各种操作
 	//封装成类可以供外部控件调用，就能实现动态地对当前页面内部进行各种操作
 	public class ImageCreat implements ActionListener{
@@ -130,7 +132,7 @@ public class PageManager {
 				ArrayList<StretchImageLabel> imgLabels = pages.get(pi).getImageLabels();
 				for(int ml = 0;ml < imgLabels.size();ml++) {
 					StretchImageLabel tmpLabel = imgLabels.get(ml);
-					tmpLabel.setStorePath(".//testImages");
+					tmpLabel.setStorePath(PageManager.getStorePath() + "//images");
 					
 					StretchImageBean imgbean = tmpLabel.getBean();
 					if(!imgbean.isChanged()) {
@@ -162,8 +164,24 @@ public class PageManager {
 			for(int i =0;i < pages.size();i++) {
 				pagesjson.add(pages.get(i).getbean());
 			}
-			FileOperator.writeJSONArray(".//pages.json", pagesjson);
+			FileOperator.writeJSONArray(PageManager.getStorePath() + "//pages.json", pagesjson);
 			//写入测试结果:OK!!!
+		}
+	}
+	
+	public class Quit implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			ImageStorage.removeAll();
+
+			if(!UIManager.DoesHaveUI("coverui")) {
+				BorderUI tmp = CoverUI.create();
+				UIManager.addToMap("coverui", tmp);
+			}
+			UIManager.setCurUI("coverui");
+			
+			if(UIManager.DoesHaveUI("pageui")) {
+				UIManager.deleteUI("pageui");
+			}
 		}
 	}
 	
@@ -212,5 +230,11 @@ public class PageManager {
 	
 	public ArrayList<Page> getPages(){
 		return pages;
+	}
+	public static String getStorePath() {
+		return storePath;
+	}
+	public static void setStorePath(String storePath) {
+		PageManager.storePath = storePath;
 	}
 }

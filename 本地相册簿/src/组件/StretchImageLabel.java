@@ -11,6 +11,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -168,7 +169,7 @@ public class StretchImageLabel extends JLabel{
 		this.setSize(size);
 		this.setLocation(loc);
 		String id = bean.getId();
-		System.out.println("bean id:" + id);
+		//System.out.println("bean id:" + id);
 		ArrayList<ImageIcon> images = ImageStorage.getImages();
 		//寻找ID相同的图片设置图片
 		for(ImageIcon icon : images) {
@@ -192,7 +193,21 @@ public class StretchImageLabel extends JLabel{
 	public void saveImage() {
 		if(imagePath == null) return;
 		//所以无论什么格式的图片存储后都会变成jpg
-		FileOperator.copyFile(imagePath, storePath + "//" + bean.getId() + ".jpg");
+		//FileOperator.copyFile(imagePath, storePath + "//" + bean.getId() + ".jpg");
+		//采用新的保存法，可缩小图片文件大小，方便读写
+		BufferedImage bi = null;
+		try {
+			bi = ImageIO.read(new File(imagePath));
+			BufferedImage bix = new BufferedImage(bean.getWidth(), bean.getHeight(),
+					BufferedImage.TYPE_3BYTE_BGR);
+			bix.getGraphics().drawImage(bi, 0, 0, 
+					bean.getWidth(), bean.getHeight(), null);
+			ImageIO.write(bix, "jpg", new File(storePath + "//" + bean.getId() + ".jpg"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public static StretchImageLabel getFocusedImageLabel() {

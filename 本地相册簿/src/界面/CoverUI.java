@@ -19,7 +19,9 @@ import tools.FileOperator;
 import 组件.Cover;
 import 组件.CoverEditor;
 import 组件.GridFrame;
+import 组件.ImageStorage;
 import 组件.MyThread;
+import 组件.PageManager;
 
 import com.alibaba.fastjson.JSONArray;
 
@@ -35,7 +37,7 @@ public class CoverUI {
 		ui.setCenterArea(grid);
 		
 		//加载相册簿封面集
-		String path = ".//user//test";
+		String path = ".//user//test"; //测试用户为test
 		Cover.setStorePath(path + "//covers");
 		ArrayList<CoverBean> covers = FileOperator.readJSONArray(path + "//covers.json", CoverBean.class);
 		for(int i = 0;i < covers.size();i++) {
@@ -47,23 +49,6 @@ public class CoverUI {
 		JPanel func = new JPanel();
 		func.setPreferredSize(ui.getFuncPreferredSize());
 		func.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
-		
-		JButton enter = new JButton();
-		enter.setPreferredSize(new Dimension(200,ui.getFuncPreferredSize().height));
-		enter.setText("进入相册");
-		enter.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				if(!UIManager.DoesHaveUI("pageui")) {
-					BorderUI temp = PageUI.create();
-					UIManager.addToMap("pageui", temp);
-				}
-				UIManager.setCurUI("pageui");
-			}
-		});
-		func.add(enter);
 		
 		JButton createbtn = new JButton("create");
 		createbtn.setPreferredSize(new Dimension(100,30));
@@ -165,7 +150,7 @@ public class CoverUI {
 				// TODO Auto-generated method stub
 				ArrayList<Cover> covers = grid.getCovers();
 				//设置cover的存储路径
-				String path = ".//user//test";
+//				String path = ".//user//test";
 				FileOperator.createFolder(path);
 				Cover.setStorePath(path);
 				FileOperator.createFolder(path + "//covers");
@@ -192,6 +177,31 @@ public class CoverUI {
 			}
 		});
 		func.add(savebtn);
+		
+		JButton enter = new JButton();
+		enter.setPreferredSize(new Dimension(200,ui.getFuncPreferredSize().height));
+		enter.setText("进入相册");
+		enter.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				/***************************/
+				savebtn.doClick();
+				Cover curCover = Cover.getCurCover();
+				String curId = curCover.getBean().getCoverId();
+				
+				PageManager.setStorePath(path + "//" + curId);
+				
+				/**************************/
+				if(!UIManager.DoesHaveUI("pageui")) {
+					BorderUI temp = PageUI.create();
+					UIManager.addToMap("pageui", temp);
+				}
+				UIManager.setCurUI("pageui");
+			}
+		});
+		func.add(enter);
 		
 		ui.setFuncArea(func);
 		
