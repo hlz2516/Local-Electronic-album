@@ -24,13 +24,14 @@ public class UIManager {
 				if(curName == null || curName.equals("")) { //如果是第一次设置当前界面
 					curName = name;
 					BorderUI cur = (BorderUI)map.get(name);
-					cur.setTitile(cur.getTitle());
+//					cur.setTitile(cur.getTitle());
 					cur.push();
 					//System.out.println("当前界面名" + cur.getTitle());
 					return;
 				}
 				//如果不是，那么，先将当前界面与内部区域解除关系
 				BorderUI pre = (BorderUI)map.get(curName);
+				pre.relieveMenu();
 				pre.relieveCenter();
 				pre.relieveFunc();
 				//再更改当前的界面名
@@ -38,7 +39,7 @@ public class UIManager {
 				//System.out.println(curName);
 				//最后通过界面名找到要设置的界面也就是panel，将该panel加入frame并设置可见
 				BorderUI cur = (BorderUI)map.get(name);
-				cur.setTitile(cur.getTitle());
+//				cur.setTitile(cur.getTitle());
 				cur.push();
 				//System.out.println("当前界面名" + cur.getTitle());
 				break;

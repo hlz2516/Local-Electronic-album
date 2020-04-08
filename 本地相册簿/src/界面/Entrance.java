@@ -29,12 +29,11 @@ public class Entrance {
 		frame.setLocationByPlatform(true);
 		//frame.setExtendedState(Frame.MAXIMIZED_BOTH);
 		//frame.setLayout(null);
-//		ImageStorage.loadImages(".//testImages");
 		
 		UIManager.setFrame(frame);
-		BorderUI coverui = CoverUI.create();
-		UIManager.addToMap("coverui", coverui);
-		UIManager.setCurUI("coverui");
+		BorderUI mainui = MainUI.create();
+		UIManager.addToMap("mainui", mainui);
+		UIManager.setCurUI("mainui");
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);

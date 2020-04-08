@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import beans.CoverBean;
+import beans.UserManager;
 import tools.DataRegister;
 import tools.FileOperator;
 import 组件.Cover;
@@ -28,8 +29,8 @@ import com.alibaba.fastjson.JSONArray;
 public class CoverUI {
 	public static BorderUI create() {
 		BorderUI ui = new BorderUI();
-		
-		ui.setTitile("相册簿封面集");
+		ui.setFuncHeightRate(0.08);
+		ui.setMenuDefault();
 		
 		Dimension d = ui.getCenterPreferredSize();
 		GridFrame grid = new GridFrame(3,8,d);
@@ -37,15 +38,18 @@ public class CoverUI {
 		ui.setCenterArea(grid);
 		
 		//加载相册簿封面集
-		String path = ".//user//test"; //测试用户为test
+		String path = ".//user//" + UserManager.getCurUser().getName(); //测试用户为test
 		Cover.setStorePath(path + "//covers");
 		ArrayList<CoverBean> covers = FileOperator.readJSONArray(path + "//covers.json", CoverBean.class);
-		for(int i = 0;i < covers.size();i++) {
-			Cover tmp = new Cover();
-			tmp.setBean(covers.get(i));
-			grid.addCover(tmp);
+		if(covers != null) {
+			for(int i = 0;i < covers.size();i++) {
+				Cover tmp = new Cover();
+				tmp.setBean(covers.get(i));
+				grid.addCover(tmp);
+			}
+			
 		}
-		
+
 		JPanel func = new JPanel();
 		func.setPreferredSize(ui.getFuncPreferredSize());
 		func.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
@@ -189,6 +193,10 @@ public class CoverUI {
 				/***************************/
 				savebtn.doClick();
 				Cover curCover = Cover.getCurCover();
+				if(curCover == null) {
+					System.out.println("请先选中相册簿簿封面");
+					return;
+				}
 				String curId = curCover.getBean().getCoverId();
 				
 				PageManager.setStorePath(path + "//" + curId);

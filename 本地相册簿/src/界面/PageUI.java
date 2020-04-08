@@ -9,6 +9,7 @@ import javax.swing.*;
 
 import beans.PageBean;
 import tools.FileOperator;
+import 组件.Cover;
 import 组件.ImageStorage;
 import 组件.Page;
 import 组件.PageManager;
@@ -16,11 +17,61 @@ import 组件.PageManager.ImageCreat;
 
 public class PageUI {
 	public static BorderUI create() {
-		BorderUI ui = new BorderUI();
-		ui.setTitile("相册簿页面");
-		
 		PageManager pm = new PageManager();
 		String path = PageManager.getStorePath();
+		BorderUI.setMenuHeightRate(0.05);
+		BorderUI ui = new BorderUI();
+		
+		JPanel menu = new JPanel();
+		menu.setPreferredSize(ui.getMenuPreferredSize());
+		menu.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
+		
+		int mw = menu.getPreferredSize().width;
+		int mh = menu.getPreferredSize().height;
+		double leftRate = 0.35,centerRate = 0.35,rightRate = 0.25;
+		
+		JPanel leftPart = new JPanel();
+		leftPart.setPreferredSize(new Dimension((int)(mw*leftRate), mh));
+		leftPart.setLayout(new FlowLayout(FlowLayout.LEFT));
+		menu.add(leftPart);
+		
+		int sh = mh - 5;
+		JButton createPage = new JButton("创建一页");
+		createPage.setPreferredSize(new Dimension((int)(mw*leftRate) /3 , sh));
+		PageManager.PageCreate pc = pm.new PageCreate();
+		createPage.addActionListener(pc);
+		leftPart.add(createPage);
+		
+		
+		JButton deletePage = new JButton("删除当前页");
+		deletePage.setPreferredSize(new Dimension((int)(mw*leftRate) /3 , sh));
+		PageManager.PageDelete pd = pm.new PageDelete();
+		deletePage.addActionListener(pd);
+		leftPart.add(deletePage);
+		
+		JPanel centerPart = new JPanel();
+		centerPart.setPreferredSize(new Dimension((int)(mw*centerRate), mh));
+		centerPart.setLayout(new FlowLayout(FlowLayout.CENTER));
+		menu.add(centerPart);
+		
+		JLabel title = new JLabel("《" + Cover.getCurCover().getThemeText() + "》");
+		title.setHorizontalAlignment(JLabel.CENTER);
+		title.setPreferredSize(new Dimension(200,sh));
+		centerPart.add(title);
+		
+		JPanel rightPart = new JPanel();
+		rightPart.setPreferredSize(new Dimension((int)(mw*rightRate), mh));
+		rightPart.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		menu.add(rightPart);
+		
+		JButton quit = new JButton("退出");
+		quit.setPreferredSize(new Dimension(60,sh));
+		PageManager.Quit q = pm.new Quit();
+		quit.addActionListener(q);
+		rightPart.add(quit);
+		
+		ui.setMenuArea(menu);
+		
 		//在这里进行页面数据的加载
 		//同样以之前的目录进行测试
 		Page p1 = null;
@@ -55,7 +106,7 @@ public class PageUI {
 		funcArea.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
 		//控件有：新建图片框，删除图片框，新建文本框，删除文本框，翻至第一页，翻至上一页，
 		//显示当前页，翻至下一页，翻至最后一页，删除当前页，保存至本地，返回
-		int btnNum = 14;
+		int btnNum = 11;
 		int width = funcArea.getPreferredSize().width / btnNum - 5;
 		int height = funcArea.getPreferredSize().height;
 		Dimension btnSize = new Dimension(width,height);
@@ -105,25 +156,10 @@ public class PageUI {
 		PageManager.TurnToLast ttl = pm.new TurnToLast();
 		last.addActionListener(ttl);
 		
-		JButton createPage = new JButton("创建一页");
-		createPage.setPreferredSize(btnSize);
-		PageManager.PageCreate pc = pm.new PageCreate();
-		createPage.addActionListener(pc);
-		
-		JButton deletePage = new JButton("删除当前页");
-		deletePage.setPreferredSize(btnSize);
-		PageManager.PageDelete pd = pm.new PageDelete();
-		deletePage.addActionListener(pd);
-		
 		JButton upLoad = new JButton("保存至本地");
 		upLoad.setPreferredSize(btnSize);
 		PageManager.Save save = pm.new Save();
 		upLoad.addActionListener(save);
-		
-		JButton quit = new JButton("退出");
-		quit.setPreferredSize(btnSize);
-		PageManager.Quit q = pm.new Quit();
-		quit.addActionListener(q);
 		
 		JButton check = new JButton("check");
 		check.setPreferredSize(btnSize);
@@ -139,10 +175,10 @@ public class PageUI {
 		funcArea.add(curPage);
 		funcArea.add(next);
 		funcArea.add(last);
-		funcArea.add(createPage);
-		funcArea.add(deletePage);
+		//funcArea.add(createPage);
+		//funcArea.add(deletePage);
 		funcArea.add(upLoad);
-		funcArea.add(quit);
+		//funcArea.add(quit);
 		funcArea.add(check);
 		ui.setFuncArea(funcArea);
 		

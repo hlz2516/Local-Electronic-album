@@ -74,7 +74,8 @@ public class PageManager {
 			page.setPreferredSize(ui.getCenterPreferredSize());
 			
 			int curIndex = pages.indexOf(curPage);
-			pages.add(curIndex+1, page);
+			pages.add(++curIndex, page);
+			showPage(curIndex);
 		}
 	}
 	public class PageDelete implements ActionListener{

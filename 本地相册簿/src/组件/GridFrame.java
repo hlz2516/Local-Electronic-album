@@ -32,7 +32,7 @@ public class GridFrame extends JPanel{
 		covers = new ArrayList<Cover>();
 //		this.frameSize = frameSize;
 		capacity = rows * cols;
-		int gap = 2;
+		int gap = 4;
 		this.setLayout(new GridLayout(rows, cols, gap, gap));//row,col,hgap,vgap
 		int gw = (frameSize.width - gap) / cols - gap;
 		int gh = (frameSize.height - gap) / rows - gap;
