@@ -17,6 +17,7 @@ import beans.CoverBean;
 import beans.UserManager;
 import tools.DataRegister;
 import tools.FileOperator;
+import tools.RootPath;
 import 组件.Cover;
 import 组件.CoverEditor;
 import 组件.GridFrame;
@@ -38,9 +39,10 @@ public class CoverUI {
 		ui.setCenterArea(grid);
 		
 		//加载相册簿封面集
-		String path = ".//user//" + UserManager.getCurUser().getName(); //测试用户为test
-		Cover.setStorePath(path + "//covers");
-		ArrayList<CoverBean> covers = FileOperator.readJSONArray(path + "//covers.json", CoverBean.class);
+		String rootDic = RootPath.getRootDictionary();
+		String path = rootDic + "user\\" + UserManager.getCurUser().getName(); //测试用户为test
+		Cover.setStorePath(path + "\\covers");
+		ArrayList<CoverBean> covers = FileOperator.readJSONArray(path + "\\covers.json", CoverBean.class);
 		if(covers != null) {
 			for(int i = 0;i < covers.size();i++) {
 				Cover tmp = new Cover();
@@ -157,7 +159,7 @@ public class CoverUI {
 //				String path = ".//user//test";
 				FileOperator.createFolder(path);
 				Cover.setStorePath(path);
-				FileOperator.createFolder(path + "//covers");
+				FileOperator.createFolder(path + "\\covers");
 				//遍历covers，找出其id，分别在用户名目录下创建文件夹和往covers里写入jpg，
 				//然后往jsonarray里加入其bean
 				JSONArray jArray = new JSONArray();
@@ -165,19 +167,19 @@ public class CoverUI {
 					Cover curCover = covers.get(i);
 					CoverBean curbean = curCover.getBean();
 					String id = curbean.getCoverId();
-					FileOperator.createFolder(path + "//" + id);
+					FileOperator.createFolder(path + "\\" + id);
 					String source = null;
 					if((source = curCover.getImagePath()) != null) {
-						if(source.equals(path + "//covers//" + id + ".jpg")) {
+						if(source.equals(path + "\\covers\\" + id + ".jpg")) {
 							jArray.add(curbean);
 							continue;
 						}
-						FileOperator.copyFile(source, path + "//covers//" + id + ".jpg");
+						FileOperator.copyFile(source, path + "\\covers\\" + id + ".jpg");
 					}
 					jArray.add(curbean);
 				}
 				//在用户名目录下创建covers.json，然后写入jsonarray
-				FileOperator.writeJSON(path + "//covers.json", jArray);
+				FileOperator.writeJSON(path + "\\covers.json", jArray);
 			}
 		});
 		func.add(savebtn);
@@ -199,7 +201,7 @@ public class CoverUI {
 				}
 				String curId = curCover.getBean().getCoverId();
 				
-				PageManager.setStorePath(path + "//" + curId);
+				PageManager.setStorePath(path + "\\" + curId);
 				
 				/**************************/
 				if(!UIManager.DoesHaveUI("pageui")) {

@@ -13,6 +13,7 @@ import javax.swing.*;
 import beans.UserBean;
 import beans.UserManager;
 import tools.FileOperator;
+import tools.RootPath;
 import 组件.Cover;
 import 组件.InputBar;
 
@@ -68,20 +69,19 @@ public class MainUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// 列出当前user目录下所有的文件夹名，看有没有跟输入的账户名相同的
-				FileOperator.createFolder(".//user");
-				File file = new File(".//user");
+				String rootDic = RootPath.getRootDictionary();
+				FileOperator.createFolder(rootDic + "user");
+				File file = new File(rootDic + "user");
 				File[] users = file.listFiles();
 				for(int i =0;i < users.length;i++) {
 					if(users[i].getName().equals(accountf.getText())) {
 						//如果相同，读取里面的json文件
-						String Path = ".//user//" + accountf.getText() + "//" +
+						String Path = rootDic + "user\\" + accountf.getText() + "\\" +
 						accountf.getText() +".json";
 						UserBean user = (UserBean) FileOperator.readJSON(Path, UserBean.class);
 						//如果json文件里的密码与用户输入的相同，则进入cover界面,设置当前用户
 						//登录界面的输入清空
 						String ps = new String(psf.getPassword());
-						System.out.println("psd from bean:" + user.getPassword());
-						System.out.println("psd from this:" + ps);
 						if(user.getPassword().equals(ps)) {
 							UserManager.setCurUser(user);
 							if(!UIManager.DoesHaveUI("coverui")) {

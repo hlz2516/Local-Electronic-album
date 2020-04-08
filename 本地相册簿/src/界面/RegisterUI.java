@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 
 import beans.UserBean;
 import tools.FileOperator;
+import tools.RootPath;
 import 组件.DateChooser;
 import 组件.InputBar;
 
@@ -142,8 +143,10 @@ public class RegisterUI {
 				user.setEmail(mailf.getText());
 				user.setPhone(phonef.getText());
 				
-				FileOperator.createFolder(".//user//" + user.getName());
-				String userMessage = ".//user//" + user.getName() + "//" + 
+				String rootDic = RootPath.getRootDictionary();
+				FileOperator.createFolder(rootDic + "user");
+				FileOperator.createFolder(rootDic + "user\\" + user.getName());
+				String userMessage = rootDic + "user\\" + user.getName() + "\\" + 
 						user.getName() + ".json";
 				FileOperator.writeJSON(userMessage, user);
 				msg.setText("注册成功!");
@@ -155,6 +158,18 @@ public class RegisterUI {
 		JButton back = new JButton("返回");
 		back.setSize(btn.getSize());
 		back.setLocation(center.getPreferredSize().width / 2 + 60, eachH*15);
+		back.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(!UIManager.DoesHaveUI("mainui")) {
+					BorderUI tmp = MainUI.create();
+					UIManager.addToMap("mainui", tmp);
+				}
+				UIManager.setCurUI("mainui");
+			}
+		});
 		center.add(back);
 		
 		ui.setCenterArea(center);

@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Class-Path: lib\fastjson-1.2.67.jar 
+Main-Class: 界面.Entrance 

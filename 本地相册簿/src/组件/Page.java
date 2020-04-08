@@ -77,7 +77,7 @@ public class Page extends JPanel{
 		for(int i = 0;i < images.size();i++) {
 			StretchImageBean tmpbean = images.get(i);
 			StretchImageLabel tmpLabel = new StretchImageLabel();
-			tmpLabel.setStorePath(PageManager.getStorePath() + "//images");
+			tmpLabel.setStorePath(PageManager.getStorePath() + "\\images");
 			tmpLabel.setBean(tmpbean);
 			this.add(tmpLabel);
 			imageLabels.add(tmpLabel);

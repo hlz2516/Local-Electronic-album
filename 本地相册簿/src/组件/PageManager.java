@@ -133,7 +133,7 @@ public class PageManager {
 				ArrayList<StretchImageLabel> imgLabels = pages.get(pi).getImageLabels();
 				for(int ml = 0;ml < imgLabels.size();ml++) {
 					StretchImageLabel tmpLabel = imgLabels.get(ml);
-					tmpLabel.setStorePath(PageManager.getStorePath() + "//images");
+					tmpLabel.setStorePath(PageManager.getStorePath() + "\\images");
 					
 					StretchImageBean imgbean = tmpLabel.getBean();
 					if(!imgbean.isChanged()) {
@@ -165,7 +165,7 @@ public class PageManager {
 			for(int i =0;i < pages.size();i++) {
 				pagesjson.add(pages.get(i).getbean());
 			}
-			FileOperator.writeJSONArray(PageManager.getStorePath() + "//pages.json", pagesjson);
+			FileOperator.writeJSONArray(PageManager.getStorePath() + "\\pages.json", pagesjson);
 			//Ð´Èë²âÊÔ½á¹û:OK!!!
 		}
 	}
