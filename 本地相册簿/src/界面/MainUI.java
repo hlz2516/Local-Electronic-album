@@ -19,8 +19,8 @@ import ×é¼þ.InputBar;
 
 public class MainUI {
 	public static BorderUI create() {
+		BorderUI.setFuncHeightRate(0.001);
 		BorderUI ui = new BorderUI();
-		ui.setFuncHeightRate(0.00);
 		
 		JPanel menu = new JPanel();
 		menu.setPreferredSize(ui.getMenuPreferredSize());

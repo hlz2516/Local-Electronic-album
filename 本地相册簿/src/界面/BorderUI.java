@@ -25,12 +25,7 @@ public class BorderUI implements Cloneable{
 	public BorderUI() {
 		frame = UIManager.getFrame();
 		frameSize = frame.getSize();
-		//创建标题栏
-//		titleBar = OneTitleBar.getInstance();
-//		int titleH = (int)(frameSize.height * titleHeightRate);
-//		titleBar.setPreferredSize(new Dimension(frameSize.width,titleH));
-//		titleBar.suitSize();
-//		titleBar.setText("");
+
 		//创建菜单栏
 		menuArea = new JPanel();
 		int menuH = (int)(frameSize.height*menuHeightRate);

@@ -85,6 +85,18 @@ public class GridFrame extends JPanel{
 		startP--;
 	}
 	
+	public void deleteCover(Cover cover) {
+		int index = -1;
+		if(covers.contains(cover)) {
+			index = covers.indexOf(cover);
+		}
+		if(index == -1) return;
+		this.deleteCover(index);
+		//逻辑上，会把该相册簿文件夹下所有文件删除，以及相册簿封面管理更新
+		
+		
+	}
+	
 	//替换只考虑图形不考虑逻辑
 	public void replace(JPanel target, int index) {
 		if(index < 0 || index >= cells.length) return;
@@ -100,6 +112,8 @@ public class GridFrame extends JPanel{
 		if(c1 >= covers.size() || c2 >= covers.size()) return;
 		Component com1 = null;
 		Component com2 = null;
+		Cover newCover = null;
+		Cover tmp = null;
 		try {
 			com1 = this.getComponent(c1);
 			com2 = this.getComponent(c2);
@@ -108,31 +122,34 @@ public class GridFrame extends JPanel{
 		}
 		if((com1 instanceof Cover) && (com2 instanceof Cover)) {
 			//用一个引用保存C1位置上的Cover
-			Cover tmp = (Cover)com1;
-			//复制C2到C1的位置上
-			copy(c2, c1);
+			tmp = (Cover)com1;
+			//复制C2到C1的位置上，注意：C1位置为一个新的Cover而非原Cover，所以在逻辑上covers里c1索引上的Cover也要变
+			newCover = copy(c2, c1);
 			//用那个引用替换C2位置的Cover
 			replace(tmp,c2);
 		}
-		Collections.swap(covers, c1, c2); 
+		covers.set(c1, newCover);
+		covers.set(c2, tmp);
+		//Collections.swap(covers, c1, c2); 
 	}
-	//这里的copy只涉及图形操作而不涉及底层的数据操作(covers和bean)
-	public void copy(int source,int target) {
-		if(source < 0 || target < 0) return;
-		if(source >= covers.size() || target >= covers.size()) return;
+	//这里的copy只涉及图形操作而不涉及底层的数据操作(covers和bean),但会返回一个目标位置上的cover
+	public Cover copy(int source,int target) {
+		if(source < 0 || target < 0) return null;
+		if(source >= covers.size() || target >= covers.size()) return null;
 		Component com1 = null;
 		Component com2 = null;
 		try {
 			com1 = this.getComponent(source);
 			com2 = this.getComponent(target);
 		} catch (Exception e) {
-			return;
+			return null;
 		}
+		Cover tmp = null;
 		if((com1 instanceof Cover) && (com2 instanceof Cover)) {
 			//创建一个新的Cover与source位置上的cover相同
 			//注意：这里创建应当调用clone,现在方便起见随便搞下
 			Cover c1 = (Cover)com1;
-			Cover tmp = null;
+			//Cover tmp = null;
 			try {
 				tmp = c1.clone();
 			} catch (Exception e) {
@@ -141,7 +158,9 @@ public class GridFrame extends JPanel{
 			//Cover tmp = new Cover();
 			//用新的cover替换target位置
 			replace(tmp,target);
+			tmp.showImage();
 		}
+		return tmp;
 	}
 	
 	public void setBlank(int index) {

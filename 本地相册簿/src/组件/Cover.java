@@ -46,6 +46,7 @@ public class Cover extends JPanel implements Cloneable{
 				if(arg0.getClickCount() == 1) {
 					Cover tmp = Cover.this;
 					Cover.setCurCover(tmp);
+					//System.out.println(Cover.getCurCover());
 				}
 				if(arg0.getClickCount() == 2) {
 					Cover thisCover = Cover.this;
@@ -96,7 +97,7 @@ public class Cover extends JPanel implements Cloneable{
 	public void setBean(CoverBean bean) {
 		this.bean = bean;
 		this.setThemeText(bean.getTheme());
-		this.setImagePath(storePath + "//" + bean.getCoverId() + ".jpg");
+		this.setImagePath(storePath + "\\" + bean.getCoverId() + ".jpg");
 		this.showImage();
 		this.setBriefText(bean.getBriefIntro());
 	}

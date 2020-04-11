@@ -29,8 +29,9 @@ import com.alibaba.fastjson.JSONArray;
 
 public class CoverUI {
 	public static BorderUI create() {
+		BorderUI.setMenuHeightRate(0.001);
+		BorderUI.setFuncHeightRate(0.08);
 		BorderUI ui = new BorderUI();
-		ui.setFuncHeightRate(0.08);
 		ui.setMenuDefault();
 		
 		Dimension d = ui.getCenterPreferredSize();
@@ -56,7 +57,7 @@ public class CoverUI {
 		func.setPreferredSize(ui.getFuncPreferredSize());
 		func.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
 		
-		JButton createbtn = new JButton("create");
+		JButton createbtn = new JButton("创建相册簿");
 		createbtn.setPreferredSize(new Dimension(100,30));
 		createbtn.addActionListener(new ActionListener() {
 			
@@ -91,61 +92,67 @@ public class CoverUI {
 		});
 		func.add(createbtn);
 		
-		JButton createCSbtn = new JButton("create covers");
-		createCSbtn.setPreferredSize(new Dimension(120, 30));
-		createCSbtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				ArrayList<Cover> covers = new ArrayList<Cover>();
-				for(int i = 0;i < 3;i++) {
-					covers.add(new Cover());
-				}
-				grid.addCovers(covers);
-			}
-		});
-		func.add(createCSbtn);
-		
-		JButton deleteBtn = new JButton("delete");
+		JButton deleteBtn = new JButton("删除相册簿");
 		deleteBtn.setPreferredSize(new Dimension(100,30));
 		deleteBtn.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// 删除最后一个元素
-				int index = grid.getCoverSize() - 1;
-				grid.deleteCover(index);
+				// 删除选中的相册簿
+				Cover curCover = Cover.getCurCover();
+				grid.deleteCover(curCover);
 				//System.out.println(grid.getsize());
 			}
 		});
 		func.add(deleteBtn);
 		
-		JButton copybtn = new JButton("copy");
-		copybtn.setPreferredSize(new Dimension(100,30));
-		copybtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// 复制最后一个位置的cover给倒数第二个，注意：复制操作只复制图形，设计这样的操作是为了方便交换
-				int index = grid.getCoverSize() - 1;
-				grid.copy(index, index-1);
-			}
-		});
-		func.add(copybtn);
+//		JButton copybtn = new JButton("copy");
+//		copybtn.setPreferredSize(new Dimension(100,30));
+//		copybtn.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				// 复制当前位置的cover给相邻前面的一个，注意：复制操作只复制图形，设计这样的操作是为了方便交换
+//				ArrayList<Cover> covers = grid.getCovers();
+//				int curIndex = covers.indexOf(Cover.getCurCover());
+//				grid.copy(curIndex, curIndex-1);
+//			}
+//		});
+//		func.add(copybtn);
 		
-		JButton swapbtn = new JButton("swap");
-		swapbtn.setPreferredSize(new Dimension(100, 30));
-		swapbtn.addActionListener(new ActionListener() {
+		JButton swapfbtn = new JButton("向前移动");
+		swapfbtn.setPreferredSize(new Dimension(100, 30));
+		swapfbtn.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// 只交换最后一个和倒数第二个
-				int index = grid.getCoverSize() - 1;
-				grid.swap(index-1, index);
+				// 只交换选中的和其相邻前面的一个相册簿
+				ArrayList<Cover> covers = grid.getCovers();
+				int curIndex = covers.indexOf(Cover.getCurCover());
+				if(curIndex == -1 || curIndex == 0) return;
+				grid.swap(curIndex-1, curIndex);
+				Cover curCover = covers.get(curIndex-1);
+				Cover.setCurCover(curCover);
 			}
 		});
-		func.add(swapbtn);
+		func.add(swapfbtn);
+		
+		JButton swapbbtn = new JButton("向后移动");
+		swapbbtn.setPreferredSize(new Dimension(100, 30));
+		swapbbtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// 只交换选中的和其相邻后面的一个相册簿
+				ArrayList<Cover> covers = grid.getCovers();
+				int curIndex = covers.indexOf(Cover.getCurCover());
+				if(curIndex == -1 || curIndex == grid.getCoverSize() -1) return;
+				grid.swap(curIndex, curIndex + 1);
+				Cover curCover = covers.get(curIndex+1);
+				Cover.setCurCover(curCover);
+			}
+		});
+		func.add(swapbbtn);
 		
 		JButton savebtn = new JButton("save");
 		savebtn.setPreferredSize(new Dimension(100, 30));
