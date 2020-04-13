@@ -21,11 +21,6 @@ public class FileOperator {
 			file.mkdir();
 		}
 	}
-	//删除一个文件（非文件夹）
-	public static void deleteFile(String filePath) {
-		File file = new File(filePath);
-		file.delete();
-	}
 	
 	public static void writeJSON(String JSONpath,Object obj) {
 		BufferedWriter bw = null;
@@ -156,5 +151,27 @@ public class FileOperator {
 				e2.printStackTrace();
 			}
 		}
+	}
+	
+	public static void deleteFiles(String path) {
+		File file = new File(path);
+		if(!file.exists()) return;
+		ergodicDeletion(file);
+	}
+	
+	public static void ergodicDeletion(File file) {
+		
+		if(file.isFile()) {
+			file.delete();
+			return;
+		}
+		
+		//file有两种可能，可能是文件，也可能是目录
+		File[] files = file.listFiles();
+		for(File subF:files) {
+			ergodicDeletion(subF);
+		}
+		//一波遍历完后可以删除该目录了
+		file.delete();
 	}
 }

@@ -7,10 +7,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import beans.CoverBean;
@@ -36,7 +38,7 @@ public class CoverUI {
 		
 		Dimension d = ui.getCenterPreferredSize();
 		GridFrame grid = new GridFrame(3,8,d);
-		grid.setBackground(Color.red);
+		//grid.setBackground(Color.red);
 		ui.setCenterArea(grid);
 		
 		//加载相册簿封面集
@@ -55,10 +57,12 @@ public class CoverUI {
 
 		JPanel func = new JPanel();
 		func.setPreferredSize(ui.getFuncPreferredSize());
-		func.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
+		func.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 2));
+		
+		Dimension btnSize = new Dimension(120, func.getPreferredSize().height - 10);
 		
 		JButton createbtn = new JButton("创建相册簿");
-		createbtn.setPreferredSize(new Dimension(100,30));
+		createbtn.setPreferredSize(btnSize);
 		createbtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -92,16 +96,35 @@ public class CoverUI {
 		});
 		func.add(createbtn);
 		
+		JButton savebtn = new JButton("save");;
+		
 		JButton deleteBtn = new JButton("删除相册簿");
-		deleteBtn.setPreferredSize(new Dimension(100,30));
+		deleteBtn.setPreferredSize(btnSize);
 		deleteBtn.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// 删除选中的相册簿
-				Cover curCover = Cover.getCurCover();
-				grid.deleteCover(curCover);
-				//System.out.println(grid.getsize());
+				//弹出对话框提示用户确认是否删除
+			  int res=JOptionPane.showConfirmDialog(null, "删除该相册簿后将无法还原，请问您确定吗？",
+					  "删除确认", JOptionPane.YES_NO_OPTION);
+              if(res==JOptionPane.YES_OPTION){ 
+    			Cover curCover = Cover.getCurCover();
+    			System.out.println(curCover.getBean());
+  				// 删除选中的相册簿
+  				grid.deleteCover(curCover);
+  		
+  				savebtn.doClick();
+  				
+			    //逻辑上，会把该相册簿文件夹下所有文件删除，以及相册簿封面管理更新(删除covers列表里对应的cover)
+				String userName = UserManager.getCurUser().getName();
+				String id = curCover.getBean().getCoverId();
+				String path = RootPath.getRootDictionary() + "user\\" + userName + 
+						"\\" + id;
+				FileOperator.deleteFiles(path);
+  				
+              }else{
+                  return;
+              } 
 			}
 		});
 		func.add(deleteBtn);
@@ -121,7 +144,7 @@ public class CoverUI {
 //		func.add(copybtn);
 		
 		JButton swapfbtn = new JButton("向前移动");
-		swapfbtn.setPreferredSize(new Dimension(100, 30));
+		swapfbtn.setPreferredSize(btnSize);
 		swapfbtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -138,7 +161,7 @@ public class CoverUI {
 		func.add(swapfbtn);
 		
 		JButton swapbbtn = new JButton("向后移动");
-		swapbbtn.setPreferredSize(new Dimension(100, 30));
+		swapbbtn.setPreferredSize(btnSize);
 		swapbbtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -154,8 +177,8 @@ public class CoverUI {
 		});
 		func.add(swapbbtn);
 		
-		JButton savebtn = new JButton("save");
-		savebtn.setPreferredSize(new Dimension(100, 30));
+		//save按钮的声明在前面，因为前面有用到
+		savebtn.setPreferredSize(btnSize);
 		savebtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -192,7 +215,7 @@ public class CoverUI {
 		func.add(savebtn);
 		
 		JButton enter = new JButton();
-		enter.setPreferredSize(new Dimension(200,ui.getFuncPreferredSize().height));
+		enter.setPreferredSize(btnSize);
 		enter.setText("进入相册");
 		enter.addActionListener(new ActionListener() {
 			
@@ -219,6 +242,25 @@ public class CoverUI {
 			}
 		});
 		func.add(enter);
+		
+		JButton cancel = new JButton("注销用户");
+		cancel.setPreferredSize(btnSize);
+		cancel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(!UIManager.DoesHaveUI("mainui")) {
+					BorderUI ui = MainUI.create();
+					UIManager.addToMap("mainui", ui);
+				}
+				UIManager.setCurUI("mainui");
+				if(UIManager.DoesHaveUI("coverui")) {
+					UIManager.deleteUI("coverui");
+				}
+			}
+		});
+		func.add(cancel);
 		
 		ui.setFuncArea(func);
 		

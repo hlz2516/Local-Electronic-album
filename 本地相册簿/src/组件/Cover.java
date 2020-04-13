@@ -3,6 +3,7 @@ package ×é¼þ;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -28,13 +29,15 @@ public class Cover extends JPanel implements Cloneable{
 	public Cover() {
 		bean = new CoverBean();
 		
-		this.setLayout(new BorderLayout(10,10));
+		this.setLayout(new BorderLayout(10,3));
 		int width = GridFrame.getGridSize().width;
 		int height = GridFrame.getGridSize().height;
 		
 		theme = new JLabel();
 		theme.setPreferredSize(new Dimension(width, (int)(height * themeHRate)));
-		theme.setBorder(BorderFactory.createLineBorder(Color.black));
+		//theme.setBorder(BorderFactory.createLineBorder(Color.black));
+		theme.setHorizontalAlignment(JLabel.CENTER);
+		theme.setVerticalAlignment(JLabel.BOTTOM);
 		this.add(theme,BorderLayout.NORTH);
 		
 		imgLabel = new JLabel();
@@ -89,7 +92,12 @@ public class Cover extends JPanel implements Cloneable{
 		
 		briefIntro = new JTextArea();
 		briefIntro.setPreferredSize(new Dimension(width, (int)(height*briefIntroHRate)));
+		briefIntro.setLineWrap(true);
+		briefIntro.setEditable(false);
 		this.add(briefIntro,BorderLayout.SOUTH);
+		briefIntro.setBackground(this.getBackground());
+		
+		this.setBorder(BorderFactory.createLineBorder(Color.darkGray, 1));
 	}
 	public CoverBean getBean() {
 		return bean;
@@ -135,6 +143,9 @@ public class Cover extends JPanel implements Cloneable{
 	public String getBriefText() {
 		return briefIntro.getText();
 	}
+//	public void setBriefIntroColor(Color color) {
+//		briefIntro.setBackground(color);
+//	}
 	public void showImage() {
 		if(imagePath == null) return;
 		 ImageIcon img = new ImageIcon(imagePath);
@@ -149,6 +160,15 @@ public class Cover extends JPanel implements Cloneable{
 			c.setThemeText(this.getThemeText());
 			c.setBriefText(this.getBriefText());
 			return c;
+	}
+	
+	public void paintComponent(Graphics g) {
+		int h1 = (int)(GridFrame.getGridSize().height * themeHRate);
+		//int h2 = (int)(GridFrame.getGridSize().height * (1 - briefIntroHRate)) - 5;
+		int w = GridFrame.getGridSize().width;
+		g.setColor(Color.lightGray);
+		g.drawLine(0, h1, w, h1);
+//		g.drawLine(0, h2, w, h2);
 	}
 	
 	public String toString() {

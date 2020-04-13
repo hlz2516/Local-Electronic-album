@@ -19,6 +19,7 @@ public class InputBar extends JPanel{
 		tipLabel = new JLabel();
 		tipLabel.setPreferredSize(tipLabSize);
 		tipLabel.setText(tip);
+		tipLabel.setHorizontalAlignment(JLabel.CENTER);
 		this.add(tipLabel);
 		
 		this.textCom = textCom;

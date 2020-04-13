@@ -27,6 +27,7 @@ public class Entrance {
 		Dimension rect = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.setSize(rect.width*2/3,rect.height*2/3);
 		frame.setLocationByPlatform(true);
+		frame.setTitle("相册簿管理系统");
 		//frame.setExtendedState(Frame.MAXIMIZED_BOTH);
 		//frame.setLayout(null);
 		

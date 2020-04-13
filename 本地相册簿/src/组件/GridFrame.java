@@ -11,12 +11,16 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import beans.UserManager;
+import tools.FileOperator;
+import tools.RootPath;
 import 界面.BorderUI;
 import 界面.UIManager;
 
@@ -44,7 +48,7 @@ public class GridFrame extends JPanel{
 //		int height1 = (frameSize.height + gap) / rows - gap;
 		for(int m = 0;m<cols*rows;m++) {
 			cells[m] = new JPanel();
-			cells[m].setBackground(new Color(6*m,6*m,6*m));
+			//cells[m].setBackground(new Color(6*m,6*m,6*m));
 			this.add(cells[m]);
 			this.validate();
 		}
@@ -81,7 +85,7 @@ public class GridFrame extends JPanel{
 			}
 			setBlank(startP - 1); 
 		}
-		covers.remove(index);
+		covers.remove(startP - 1);
 		startP--;
 	}
 	
@@ -92,8 +96,6 @@ public class GridFrame extends JPanel{
 		}
 		if(index == -1) return;
 		this.deleteCover(index);
-		//逻辑上，会把该相册簿文件夹下所有文件删除，以及相册簿封面管理更新
-		
 		
 	}
 	
@@ -130,7 +132,12 @@ public class GridFrame extends JPanel{
 		}
 		covers.set(c1, newCover);
 		covers.set(c2, tmp);
-		//Collections.swap(covers, c1, c2); 
+		
+//		List<Cover> covers = this.getCovers();
+//		for(Cover cover:covers) {
+//			System.out.println(cover.getBean());
+//		System.out.println("------------------------------");
+//      }
 	}
 	//这里的copy只涉及图形操作而不涉及底层的数据操作(covers和bean),但会返回一个目标位置上的cover
 	public Cover copy(int source,int target) {

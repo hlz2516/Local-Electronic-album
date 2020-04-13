@@ -58,7 +58,7 @@ public class RegisterUI {
 		dateChooser.setSize(passwordf.getPreferredSize());
 		int x = (width - userName.getWidth())/2;
 		dateChooser.setLocation(x + birth.getWidth(), eachH*5);
-		birth.setLocation(x,eachH*5);
+		birth.setLocation(x+10,eachH*5);
 		center.add(birth);
 		center.add(dateChooser);
 		
