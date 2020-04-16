@@ -10,21 +10,17 @@ import javax.swing.JPanel;
 import 组件.OneTitleBar;
 
 public class BorderUI implements Cloneable{
-	//public static OneTitleBar titleBar; 
 	private JComponent menuArea;
 	private JComponent centerArea;
 	private JComponent funcArea;
 	private static double menuHeightRate = 0.04;
 	private static double funcHeightRate = 0.08;
-//	private String title;
-	private Dimension frameSize;
-	private static JFrame frame;
-	private static JComponent Area[] = new JComponent[3];
+	private JComponent Area[] = new JComponent[3];
 	
 	
 	public BorderUI() {
-		frame = UIManager.getFrame();
-		frameSize = frame.getSize();
+		JFrame frame = UIManager.getFrame();
+		Dimension frameSize = frame.getSize();
 
 		//创建菜单栏
 		menuArea = new JPanel();
@@ -54,7 +50,6 @@ public class BorderUI implements Cloneable{
 	public void setCenterArea(JComponent pane) {
 		if(pane.getPreferredSize().equals(getCenterPreferredSize())) {
 			centerArea = pane;
-			//System.out.println("centerArea repalced");
 		}
 	}
 	
@@ -65,15 +60,15 @@ public class BorderUI implements Cloneable{
 	}
 	
 	public JComponent getmenuArea() {
-		return this.menuArea;
+		return menuArea;
 	}
 	
 	public JComponent getCenterArea() {
-		return this.centerArea;
+		return centerArea;
 	}
 	
 	public JComponent getFuncArea() {
-		return this.funcArea;
+		return funcArea;
 	}
 	
 	public Dimension getMenuPreferredSize() {
@@ -98,16 +93,8 @@ public class BorderUI implements Cloneable{
 			funcHeightRate = rate;
 	}
 	
-//	public void setTitile(String title) {
-//		this.title = title;
-//		titleBar.setText(title);
-//	}
-	
-//	public String getTitle() {
-//		return title;
-//	}
-	
 	public void push() {
+		JFrame frame = UIManager.getFrame();
 		if(menuArea != null)
 			frame.add(menuArea,BorderLayout.NORTH);
 		frame.validate();
@@ -120,6 +107,7 @@ public class BorderUI implements Cloneable{
 	}
 	
 	public void relieve() {
+		JFrame frame = UIManager.getFrame();
 		if(menuArea != null)
 			frame.remove(menuArea);
 		frame.validate();
@@ -132,38 +120,41 @@ public class BorderUI implements Cloneable{
 	}
 	
 	public void relieveMenu() {
+		JFrame frame = UIManager.getFrame();
 		if(menuArea != null)
 			frame.remove(menuArea);
 		frame.validate();
 	}
 	
 	public void relieveCenter() {
+		JFrame frame = UIManager.getFrame();
 		if(centerArea != null)
 			frame.remove(centerArea);
 		frame.validate();
 	}
 	
 	public void relieveFunc() {
+		JFrame frame = UIManager.getFrame();
 		if(funcArea != null)
 			frame.remove(funcArea);
 		frame.validate();
 	}
 	
 	//9.复制一个BorderUI并且对其进行改造生成一个新的BorderUI，如果传的参数为null则表示不更改对应的区域
-	public static BorderUI modifyCreate(BorderUI ui,JComponent menuArea,
-			JComponent centerArea,JComponent funcArea) {
-		BorderUI temp = (BorderUI)ui.clone();
-		if(ui == null)
-			return ui;
-		if(menuArea != null) 
-			temp.setMenuArea(menuArea);
-		if(centerArea != null)
-			temp.setCenterArea(centerArea);
-		if(funcArea != null)
-			temp.setFuncArea(funcArea);
-		
-		return temp;
-	}
+//	public static BorderUI modifyCreate(BorderUI ui,JComponent menuArea,
+//			JComponent centerArea,JComponent funcArea) {
+//		BorderUI temp = (BorderUI)ui.clone();
+//		if(ui == null)
+//			return ui;
+//		if(menuArea != null) 
+//			temp.setMenuArea(menuArea);
+//		if(centerArea != null)
+//			temp.setCenterArea(centerArea);
+//		if(funcArea != null)
+//			temp.setFuncArea(funcArea);
+//		
+//		return temp;
+//	}
 	
 	public void setMenuDefault() {
 		if(menuArea != null)
