@@ -119,7 +119,6 @@ public class PageManager {
 	}
 	public class Save implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			//测试：默认存储图片的文件路径".//testImages"	,json路径为".//pages.json"
 			//按下save按钮后，遍历pages里的每个pagebean,引出每个pagebean里的images和texts
 			//遍历images，
 			//看是否改变（ischanged），如果没改变，去图片加载器里寻找对应id的图片，

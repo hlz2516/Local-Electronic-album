@@ -28,8 +28,7 @@ public class StretchTextArea extends JTextArea{
 	private StretchTextBean bean;
 	private Dimension size = new Dimension(200,50);
 	private Point loc = new Point(0,0);
-	private static int originX;
-	private static int originY;
+
 	private static boolean isPressed;
 	private static boolean stretchMode;
 	private static StretchTextArea focusedTextArea;
@@ -72,6 +71,8 @@ public class StretchTextArea extends JTextArea{
 				});
 		//实现拖动文字框
 		this.addMouseListener(new MouseAdapter() {
+			private int originX;
+			private int originY;
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub

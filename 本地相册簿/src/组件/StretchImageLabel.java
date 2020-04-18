@@ -27,8 +27,6 @@ public class StretchImageLabel extends JLabel{
 	private String storePath;
 	private Dimension size = new Dimension(200,200);
 	private Point loc = new Point(0,0);
-	private static int originX;
-	private static int originY;
 	private static boolean isPressed = false;
 	private static boolean stretchMode = false;
 	private static StretchImageLabel focusedLabel;
@@ -68,7 +66,8 @@ public class StretchImageLabel extends JLabel{
 		});
 		//实现按住鼠标移动图片框
 		this.addMouseListener(new MouseAdapter() {
-			
+			private int originX;
+			private int originY;
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub

@@ -11,7 +11,6 @@ public class StretchComBean {
 	private int width;
 	@JSONField(ordinal = 3)
 	private int height;
-	
 	public int getX() {
 		return x;
 	}

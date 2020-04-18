@@ -73,10 +73,10 @@ public class PageUI {
 		ui.setMenuArea(menu);
 		
 		//在这里进行页面数据的加载
-		//同样以之前的目录进行测试
 		Page p1 = null;
-		System.out.println(PageManager.getStorePath());
-		ArrayList<PageBean> pbs = FileOperator.readJSONArray(PageManager.getStorePath() + "\\pages.json", PageBean.class);
+		//System.out.println(PageManager.getStorePath());
+		ArrayList<PageBean> pbs = FileOperator.readJSONArray(PageManager.getStorePath() +
+				"\\pages.json", PageBean.class);
 		if(pbs != null) { //第N次进相册簿所以加载
 			ImageStorage.loadImages(PageManager.getStorePath() + "\\images");
 			
@@ -85,14 +85,14 @@ public class PageUI {
 				Page tmp = new Page();
 				tmp.setPreferredSize(ui.getCenterPreferredSize());
 				tmp.setBean(pbs.get(i));
-				System.out.println(pbs.get(i));
+				//System.out.println(pbs.get(i));
 				pm.addPage(tmp);
 			}
 			p1 = pm.getPages().get(0);
 		}else { //说明这是第一次进这个相册簿
 			//在这个目录下新建一个images文件夹
 			FileOperator.createFolder(PageManager.getStorePath() + "\\images");
-			System.out.println("第一次进入");
+			//System.out.println("第一次进入");
 			p1 = new Page();
 			p1.setPreferredSize(ui.getCenterPreferredSize());
 			pm.addPage(p1);

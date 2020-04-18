@@ -109,7 +109,7 @@ public class CoverUI {
 					  "删除确认", JOptionPane.YES_NO_OPTION);
               if(res==JOptionPane.YES_OPTION){ 
     			Cover curCover = Cover.getCurCover();
-    			System.out.println(curCover.getBean());
+    			//System.out.println(curCover.getBean());
   				// 删除选中的相册簿
   				grid.deleteCover(curCover);
   		

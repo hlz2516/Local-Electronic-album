@@ -7,8 +7,6 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import ×é¼þ.OneTitleBar;
-
 public class BorderUI implements Cloneable{
 	private JComponent menuArea;
 	private JComponent centerArea;

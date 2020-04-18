@@ -20,9 +20,7 @@ public class StretchImageBean extends StretchComBean{
 	public String getId() {
 		return id;
 	}
-	//当输入的id为空时，说明没有图片；id不为空时会随机给一个id
-	//如果要对StretchImageLabel类单独测试，请解开27行注释26行
-	//如果要对其他类进行测试，请解开26行注释27行
+
 	public void setId(String id) {
 		this.id = id;
 	}

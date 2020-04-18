@@ -43,7 +43,7 @@ public class Cover extends JPanel implements Cloneable{
 		imgLabel = new JLabel();
 		imgLabel.setPreferredSize(new Dimension(width,
 				(int)(height * (1 - themeHRate - briefIntroHRate))));
-		imgLabel.setBorder(BorderFactory.createDashedBorder(null));
+		imgLabel.setBorder(BorderFactory.createLineBorder(Color.MAGENTA, 1));
 		imgLabel.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent arg0) {
 				if(arg0.getClickCount() == 1) {
@@ -92,12 +92,13 @@ public class Cover extends JPanel implements Cloneable{
 		
 		briefIntro = new JTextArea();
 		briefIntro.setPreferredSize(new Dimension(width, (int)(height*briefIntroHRate)));
+		//briefIntro.setBorder(BorderFactory.createLineBorder(Color.black));
 		briefIntro.setLineWrap(true);
 		briefIntro.setEditable(false);
 		this.add(briefIntro,BorderLayout.SOUTH);
 		briefIntro.setBackground(this.getBackground());
 		
-		this.setBorder(BorderFactory.createLineBorder(Color.darkGray, 1));
+		this.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
 	}
 	public CoverBean getBean() {
 		return bean;
@@ -164,11 +165,11 @@ public class Cover extends JPanel implements Cloneable{
 	
 	public void paintComponent(Graphics g) {
 		int h1 = (int)(GridFrame.getGridSize().height * themeHRate);
-		//int h2 = (int)(GridFrame.getGridSize().height * (1 - briefIntroHRate)) - 5;
+		int h2 = (int)(GridFrame.getGridSize().height * (1 - briefIntroHRate));
 		int w = GridFrame.getGridSize().width;
 		g.setColor(Color.lightGray);
 		g.drawLine(0, h1, w, h1);
-//		g.drawLine(0, h2, w, h2);
+		g.drawLine(0, h2, w, h2);
 	}
 	
 	public String toString() {

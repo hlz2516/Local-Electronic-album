@@ -28,6 +28,18 @@ public class MainUI {
 		
 		JButton btn = new JButton("’Àªßπ‹¿Ì");
 		btn.setPreferredSize(new Dimension(100, menu.getPreferredSize().height - 10));
+		btn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(!UIManager.DoesHaveUI("usermanagerui")) {
+					BorderUI ui = UserManageUI.create();
+					UIManager.addToMap("usermanagerui", ui);
+				}
+				UIManager.setCurUI("usermanagerui");
+			}
+		});
 		
 		menu.add(btn);
 		ui.setMenuArea(menu);
