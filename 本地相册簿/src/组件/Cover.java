@@ -2,11 +2,14 @@ package ×é¼þ;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
 
 import javax.swing.*;
 
@@ -49,7 +52,7 @@ public class Cover extends JPanel implements Cloneable{
 				if(arg0.getClickCount() == 1) {
 					Cover tmp = Cover.this;
 					Cover.setCurCover(tmp);
-					//System.out.println(Cover.getCurCover());
+					
 				}
 				if(arg0.getClickCount() == 2) {
 					Cover thisCover = Cover.this;
@@ -76,6 +79,13 @@ public class Cover extends JPanel implements Cloneable{
 					}
 					DataRegister.setChanged(false);
 				}
+			}
+		});
+		
+		imgLabel.addMouseMotionListener(new MouseMotionAdapter() {
+			public void mouseMoved(MouseEvent e) {
+				JLabel inst = (JLabel)e.getSource();
+				inst.setCursor(Cursor.getPredefinedCursor(12));
 			}
 		});
 		this.add(imgLabel,BorderLayout.CENTER);
@@ -165,11 +175,11 @@ public class Cover extends JPanel implements Cloneable{
 	
 	public void paintComponent(Graphics g) {
 		int h1 = (int)(GridFrame.getGridSize().height * themeHRate);
-		int h2 = (int)(GridFrame.getGridSize().height * (1 - briefIntroHRate));
+//		int h2 = (int)(GridFrame.getGridSize().height * (1 - briefIntroHRate));
 		int w = GridFrame.getGridSize().width;
 		g.setColor(Color.lightGray);
 		g.drawLine(0, h1, w, h1);
-		g.drawLine(0, h2, w, h2);
+//		g.drawLine(0, h2, w, h2);
 	}
 	
 	public String toString() {

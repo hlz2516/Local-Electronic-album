@@ -12,8 +12,8 @@ import com.alibaba.fastjson.JSONWriter;
 import beans.*;
 
 public class JsonTest {
-	public static void main(String[] args) {
-		//构建bean
+//	public static void main(String[] args) {
+//		//构建bean
 //		PageBean page = new PageBean();
 //		StretchImageBean img = new StretchImageBean();
 //		img.setX(10);img.setY(10);
@@ -50,26 +50,26 @@ public class JsonTest {
 //				e.printStackTrace();
 //			}
 //		}
-		
-		String path = ".//test.json";
-		PageBean obj = null;
-		BufferedReader br = null;
-		JSONReader reader = null;
-		try {
-			br = new BufferedReader(new FileReader(path));
-			reader = new JSONReader(br);
-			obj = reader.readObject(PageBean.class);
-			System.out.println(obj);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}finally {
-			reader.close();
-			try {
-				br.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
+//		
+//		String path = ".//test.json";
+//		PageBean obj = null;
+//		BufferedReader br = null;
+//		JSONReader reader = null;
+//		try {
+//			br = new BufferedReader(new FileReader(path));
+//			reader = new JSONReader(br);
+//			obj = reader.readObject(PageBean.class);
+//			System.out.println(obj);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}finally {
+//			reader.close();
+//			try {
+//				br.close();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//	}
 }

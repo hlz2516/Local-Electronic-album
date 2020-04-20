@@ -72,6 +72,12 @@ public class MainUI {
 		ps.setLocation(x, eachH*9);
 		center.add(ps);
 		
+		JLabel message = new JLabel();
+		message.setSize(new Dimension(250, eachH));
+		message.setLocation((menu.getPreferredSize().width - message.getWidth()) / 2, eachH*15);
+		message.setHorizontalAlignment(JLabel.CENTER);
+		center.add(message);
+		
 		JButton login = new JButton("登录");
 		login.setSize(60,eachH);
 		int lx = center.getPreferredSize().width / 2 - 60 - login.getWidth();
@@ -85,7 +91,8 @@ public class MainUI {
 				FileOperator.createFolder(rootDic + "user");
 				File file = new File(rootDic + "user");
 				File[] users = file.listFiles();
-				for(int i =0;i < users.length;i++) {
+				int i = 0;
+				for(;i < users.length;i++) {
 					if(users[i].getName().equals(accountf.getText())) {
 						//如果相同，读取里面的json文件
 						String Path = rootDic + "user\\" + accountf.getText() + "\\" +
@@ -104,10 +111,17 @@ public class MainUI {
 							
 							accountf.setText("");
 							psf.setText("");
+							message.setText("");
+						}
+						else {
+							message.setText("密码错误，请重新输入密码！");
+							break;
 						}
 					}
 				}
-				
+				if(i == users.length) {
+					message.setText("不存在当前用户，请先注册！");
+				}
 			}
 		});
 		center.add(login);

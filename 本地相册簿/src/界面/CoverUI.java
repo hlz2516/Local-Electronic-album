@@ -12,6 +12,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -39,6 +40,7 @@ public class CoverUI {
 		Dimension d = ui.getCenterPreferredSize();
 		GridFrame grid = new GridFrame(3,8,d);
 		//grid.setBackground(Color.red);
+		
 		ui.setCenterArea(grid);
 		
 		//加载相册簿封面集
@@ -60,6 +62,10 @@ public class CoverUI {
 		func.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 2));
 		
 		Dimension btnSize = new Dimension(120, func.getPreferredSize().height - 10);
+		
+		JLabel message = new JLabel();
+		message.setPreferredSize(new Dimension(250, func.getPreferredSize().height - 10));
+		func.add(message);
 		
 		JButton createbtn = new JButton("创建相册簿");
 		createbtn.setPreferredSize(btnSize);
@@ -226,9 +232,11 @@ public class CoverUI {
 				savebtn.doClick();
 				Cover curCover = Cover.getCurCover();
 				if(curCover == null) {
-					System.out.println("请先选中相册簿簿封面");
+					//System.out.println("请先选中相册簿簿封面");
+					message.setText("请先选中相册簿簿封面");
 					return;
 				}
+				message.setText("");
 				String curId = curCover.getBean().getCoverId();
 				
 				PageManager.setStorePath(path + "\\" + curId);

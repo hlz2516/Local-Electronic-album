@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -111,7 +112,7 @@ public class RegisterUI {
 		
 		//一个显示注册情况的label
 		JLabel msg = new JLabel();
-		msg.setSize(80,50);
+		msg.setSize(250,50);
 		msg.setLocation((width - msg.getWidth())/2, eachH*13);
 		msg.setVerticalAlignment(JLabel.CENTER);
 		center.add(msg);
@@ -127,6 +128,16 @@ public class RegisterUI {
 				// TODO Auto-generated method stub
 				if(userNamef.getText() == null || userNamef.getText().equals(""))
 					return;
+				//判断要注册的用户名是否重名
+				String path = RootPath.getRootDictionary() + "user";
+				File[] userFiles = new File(path).listFiles();
+				for(int i = 0;i < userFiles.length;i++) {
+					if(userNamef.getText().equals(userFiles[i].getName())) {
+						msg.setText("用户名已被注册！");
+						return;
+					}
+				}
+				
 				String password = new String(passwordf.getPassword());
 				if(password == null || password.equals("")) return;
 				if(dateChooser.getSelectedDate() == null) return;
@@ -136,6 +147,7 @@ public class RegisterUI {
 					return;
 				if(phonef.getText() == null || phonef.getText().equals(""))
 					return;
+				
 				UserBean user = new UserBean();
 				user.setName(userNamef.getText());
 				user.setPassword(password);
